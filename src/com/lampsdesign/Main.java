@@ -1,17 +1,34 @@
 package com.lampsdesign;
 
+import com.model.Datasource;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+
 public class Main {
 
-    public static final String DB_NAME = "messaging.db";
-    public static final String CONNECTION_STRING = "jdbc:sqlite:F:\\Java Projects\\SQLDatabase\\" + DB_NAME;
-
-    public static final String TABLE_CONTACTS = "contacts";
-
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_PHONE = "phone";
-    public static final String COLUMN_EMAIL = "email";
-
     public static void main(String[] args) {
-	// write your code here
+
+        Datasource datasource = new Datasource();
+
+        ServerSocket serverSocket = null;
+
+        try {
+            serverSocket = new ServerSocket(5000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!datasource.open()) {
+            System.out.println("Can't open datasource");
+            return;
+        }
+
+
+        Server server = new Server(serverSocket);
+        server.startServer();
+
+        server.closeServer();
+        datasource.close();
     }
 }
